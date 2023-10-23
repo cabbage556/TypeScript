@@ -19,6 +19,7 @@ const yujin: Idol = {
 function updateIdol(original: Idol, updates: Partial<Idol>): Idol {
   return {
     ...original,
+    ...updates,
   };
 }
 
