@@ -1,0 +1,20 @@
+<script>
+  function one() {
+    console.log("function one");
+    console.log("function one end");
+  }
+
+  function two() {
+    console.log("function two");
+    one();
+    console.log("function two end");
+  }
+
+  function three() {
+    console.log("function three");
+    two();
+    console.log("function three end");
+  }
+
+  three();
+</script>
