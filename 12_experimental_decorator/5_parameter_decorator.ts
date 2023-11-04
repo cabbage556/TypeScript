@@ -10,6 +10,7 @@ class Cat {
   }
 
   dance(
+    // 파라미터 데코레이터는 파라미터 선언 직전에 선언됨
     @LogParam // dance에 0번째 파라미터가 정의되었습니다.
     adj: string
   ) {
@@ -17,9 +18,12 @@ class Cat {
   }
 }
 
-// 파라미터 데코레이터
-//    target, propertyKey는 메서드 데코레이터의 파라미터와 동일함
-//    paramIndex는 여러 파라미터를 입력 받을 때 파라미터의 순서를 나타냄(0, 1, 2, ...)
+/**
+ * 파라미터 데코레이터의 파라미터 3가지
+ * @param target 스태틱 메서드의 경우 클래스의 생성자 함수를, 인스턴스 메서드의 경우 클래스의 프로토타입을 가리킴
+ * @param propertyKey  메서드의 이름(프로퍼티의 키)
+ * @param paramIndex  함수의 파라미터 목록에 있는 파라미터의 인덱스(0, 1, 2, ...)
+ * */
 function LogParam(target: any, propertyKey: string, paramIndex: number) {
   console.log(`${propertyKey}에 ${paramIndex}번째 파라미터가 정의되었습니다.`);
 }
