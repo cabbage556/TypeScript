@@ -1,5 +1,7 @@
 /**
  * Property attribute
+ *
+ * JS 엔진은 프로퍼티 생성 시 프로퍼티의 상태를 표현하는 프로퍼티 어트리뷰트를 기본값으로 자동 정의함
  */
 
 const yujin = {
@@ -7,25 +9,33 @@ const yujin = {
   year: 2003,
 };
 
+// Object.getOwnPropertyDescriptor 메서드를 사용하면 객체의 프로퍼티에 대한 프로퍼티 디스크립터 객체를 얻을 수 있음
+// 프로퍼티 디스크립터 객체: 프로퍼티 어트리뷰트 정보를 제공하는 객체
 console.log(Object.getOwnPropertyDescriptor(yujin, "year"));
-// { value: 2003, writable: true, enumerable: true, configurable: true }
+// year 프로퍼티의 프로퍼티 어트리뷰트 정보를 제공하는 프로퍼티 디스크립터 객체
+//     ➡️ { value: 2003, writable: true, enumerable: true, configurable: true }
 
 /**
  * 객체에 대해 섬세한 작업이 필요할 경우 프로퍼티 어트리뷰트를 적극 활용 가능
+ * 4가지 프로퍼티 어트리뷰트가 존재함
  *
  * 1. value: 프로퍼티의 실제 값
  * 2. writable: 프로퍼티의 값 수정 여부
- *              false 설정 시 프로퍼티의 값 수정 불가능
+ *              true인 경우 프로퍼티의 값 수정 가능
+ *              false인 경우 프로퍼티의 값 수정 불가능
  * 3. enumerable: 프로퍼티 열거 가능 여부
- *                for...in 반복문 등을 사용할 수 있으면 true를 반환함
+ *                true인 경우 for...in 반복문 등을 통해 해당 프로퍼티 열거 가능
+ *                false인 경우 for...in 반복문 등을 통해 해당 프로퍼티 열거 불가능
  * 4. configurable: 프로퍼티 어트리뷰트의 재정의 가능 여부
- *                  false 설정 시 프로퍼티 삭제나 어트리뷰트 수정이 금지됨
+ *                  true인 경우 해당 프로퍼티의 삭제, 다른 프로퍼티 어트리뷰트의 수정 가능
+ *                  false인 경우 해당 프로퍼티의 삭제, 다른 프로퍼티 어트리뷰트의 수정 불가능
  *                  단 writable이 true인 경우 값 변경과 writable을 변경하는 건 가능함
  */
 
 console.log(Object.getOwnPropertyDescriptor(yujin, "name"));
 // { value: '안유진', writable: true, enumerable: true, configurable: true }
 
+// Object.getOwnPropertyDescriptors 메서드를 사용하면 객체의 모든 프로퍼티에 대한 프로퍼티 디스크립터 객체를 얻을 수 있음
 console.log(Object.getOwnPropertyDescriptors(yujin));
 // {
 //   name: { value: '안유진', writable: true, enumerable: true, configurable: true },
@@ -58,10 +68,10 @@ console.log(yujin2.year); // 1991
 
 // 액세서 프로퍼티의 어트리뷰트 확인
 console.log(Object.getOwnPropertyDescriptor(yujin2, "age"));
-// 액세서 프로퍼티에는 get, set 어트리뷰트가 존재함
+// 일반적인 프로퍼티와 달리 액세서 프로퍼티에는 get, set 어트리뷰트가 존재함
 // {
-//   get: [Function: get age], // getter
-//   set: [Function: set age], // setter
+//   get: [Function: get age], // getter 접근자 함수
+//   set: [Function: set age], // setter 접근자 함수
 //   enumerable: true,
 //   configurable: true
 // }
@@ -72,7 +82,7 @@ console.log(yujin2);
 console.log(Object.getOwnPropertyDescriptor(yujin2, "height"));
 // { value: 172, writable: true, enumerable: true, configurable: true }
 
-// 프로퍼티 어트리뷰트의 값을 할당하면서 프로퍼티를 추가하는 방법(Object.definedProperty)
+// 프로퍼티 어트리뷰트의 값을 할당하면서 프로퍼티를 추가하는 방법(Object.defineProperty)
 Object.defineProperty(yujin2, "height2", {
   value: 172,
   writable: false,
@@ -188,7 +198,7 @@ Object.defineProperty(yujin2, "height", {
 yujin2.height = 177;
 console.log(yujin2.height); // 177: height 프로퍼티의 값이 변경됨
 
-// configurable이 false인 상태에서 writable이 true이면 프로퍼티 값 변경과 writable 수정이 가능함
+// height 프로퍼티의 writable 프로퍼티 어트리뷰트를 false로 수정
 Object.defineProperty(yujin2, "height", {
   writable: false,
 });
