@@ -56,11 +56,16 @@ const yujin2 = {
   },
 };
 
+console.log(
+  "⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️"
+);
 console.log(Object.isSealed(yujin2)); // false(기본값): 객체가 봉인이 되어 있지 않음
+console.log(Object.getOwnPropertyDescriptors(yujin2)); // 모든 프로퍼티의 configurable 프로퍼티 어트리뷰트가 true로 설정되어 있음
 
-// 객체 봉인하기
+// 객체 봉인하기(모든 프로퍼티의 configurable 프로퍼티 어트리뷰트를 false로 변경)
 Object.seal(yujin2);
 console.log(Object.isSealed(yujin2)); // true: 객체가 봉인됨
+console.log(Object.getOwnPropertyDescriptors(yujin2)); // 모든 프로퍼티의 configurable 프로퍼티 어트리뷰트가 false로 변경됨
 
 // 객체가 봉인되어 groupName 프로퍼티가 추가되지 않음
 yujin2.groupName = "아이브";
@@ -70,20 +75,20 @@ console.log(yujin2);
 delete yujin2.name;
 console.log(yujin2);
 
-// 객체 봉인 후 프로퍼티 어트리뷰트 수정
+// 객체 봉인 후 name 프로퍼티의 value 프로퍼티 어트리뷰트 수정(프로퍼티의 값 수정과 같음)
 Object.defineProperty(yujin2, "name", {
-  value: "밖유진",
+  value: "밖유진", // 안유진 -> 밖유진
 });
 console.log(Object.getOwnPropertyDescriptor(yujin2, "name"));
 // { value: '밖유진', writable: true, enumerable: true, configurable: false }
-//    value 프로퍼티 어트리뷰트는 변경됨
-//    configurable 프로퍼티 어트리뷰트는 기본 값이 false로 설정되어 있음
+//    writable 프로퍼티 어트리뷰트가 true이므로 value 프로퍼티 어트리뷰트는 변경됨
+//    configurable 프로퍼티 어트리뷰트는 기본값이 false로 설정되어 있음
 
 /**
  * Freezed: 객체 동결
  *
  * 가장 높은 불변 객체 등급
- * 읽기 외에 모든 기능을 불가능하게 만듬(프로퍼티 추가, 제거, 값 변경)
+ * 읽기 외에 모든 기능을 불가능하게 만듬(프로퍼티 추가, 제거, 값 변경 + 프로퍼티 어트리뷰트 재정의)
  */
 const yujin3 = {
   name: "안유진",
@@ -98,7 +103,11 @@ const yujin3 = {
   },
 };
 
+console.log(
+  "⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️"
+);
 console.log(Object.isFrozen(yujin3)); // false(기본값): 객체가 동결되어 있지 않음
+console.log(Object.getOwnPropertyDescriptors(yujin3));
 
 // 객체 동결
 Object.freeze(yujin3);
@@ -147,3 +156,28 @@ const yujin4 = {
 Object.freeze(yujin4);
 console.log(Object.isFrozen(yujin4)); // true: yujin4 객체가 동결됨
 console.log(Object.isFrozen(yujin4.wonyoung)); // false: 중첩 객체는 동결되지 않음
+
+// 중첩 객체까지 동결하기
+function deepFreeze(target) {
+  // 객체가 아니거나 이미 동결된 객체는 동결 대상에서 제외
+  if (target && typeof target === "object" && !Object.isFrozen(target)) {
+    Object.freeze(target);
+
+    Object.keys(target).forEach((key) => deepFreeze(target[key]));
+  }
+
+  return target;
+}
+
+const yujin5 = {
+  name: "안유진",
+  year: 2003,
+  // 중첩 객체
+  wonyoung: {
+    name: "장원영",
+    year: 2004,
+  },
+};
+deepFreeze(yujin5);
+console.log(Object.isFrozen(yujin5)); // true: yujin5 객체가 동결됨
+console.log(Object.isFrozen(yujin5.wonyoung)); // true: yujin5.wonyoung 중첩 객체까지 동결됨
