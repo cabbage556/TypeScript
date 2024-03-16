@@ -1,20 +1,22 @@
 <script>
-  function one() {
-    console.log("function one");
-    console.log("function one end");
-  }
+    function one() {
+        console.log("function one");
+        console.log("function one end");
+    }
 
-  function two() {
-    console.log("function two");
-    one();
-    console.log("function two end");
-  }
+    function two() {
+        console.log("function two");
+        one();
+        console.log("function two end");
+    }
 
-  function three() {
-    console.log("function three");
-    two();
-    console.log("function three end");
-  }
+    function three() {
+        console.log("function three");
+        two();
+        console.log("function three end");
+    }
 
-  three();
+    // 콜 스택
+    //    글로벌 실행 컨텍스트 -> three 함수 실행 컨텍스트 -> two 함수 실행 컨텍스트 -> one 함수 실행 컨텍스트
+    three();
 </script>
